@@ -1,11 +1,17 @@
 import logo from "./logo.svg";
 import "./App.css";
 import AICenter from "./AICenter";
-import { useState } from "react";
+import { useState,useMemo } from "react";
 
 function App() {
   const [postId, setPostId] = useState(1);
-
+  const [query,setQuery] = useState("")
+  const [prompt, setPrompt] = useState("");
+  const MemoizedAICenter = useMemo(()=>{
+      return <AICenter prompt={prompt} />
+  }, [
+    prompt
+  ])
   return (
     <div
       style={{
@@ -35,10 +41,13 @@ function App() {
         <h2 style={{ marginBottom: "10px", fontWeight: "bold" }}>React Code</h2>
         <p>This section contains React code and content.</p>
         <input
-          value={postId}
-          type="number"
-          onChange={(e) => setPostId(e.target.value)}
+          value={query}
+          type="string"
+          onChange={(e) => setQuery(e.target.value)}
         />
+        <button onClick={()=>setPrompt(query)}>
+          send
+        </button>
       </div>
 
       <div
@@ -51,7 +60,7 @@ function App() {
         }}
       >
         <h2 style={{ marginBottom: "15px", fontWeight: "bold" }}>
-          Component from Next.js ID: {postId}
+          Component from Next.js ID: {prompt}
         </h2>
         <div
           style={{
@@ -60,8 +69,9 @@ function App() {
             borderRadius: "8px",
             border: "1px solid #e5e7eb",
           }}
-        >
-          <AICenter id={postId} />
+        > 
+          {MemoizedAICenter}
+          {/* <AICenter prompt={prompt} /> */}
         </div>
       </div>
     </div>
